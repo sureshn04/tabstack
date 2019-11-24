@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+  "name": "Hit Save",
+  "version": "0.1",
+  "background": {
+    "scripts": ["src/background.js"],
+    "persistent": false
+  },
+  "permissions": ["tabs","declarativeContent","storage"],
+  "browser_action": {
+    "default_popup": "src/popup.html",
+    "default_title": "Save all your tabs",
+    "default_icon": {
+      "16": "src/images/get_started16.png",
+      "32": "src/images/get_started32.png",
+      "48": "src/images/get_started48.png",
+      "128": "src/images/get_started128.png"
+    }
+  },
+  "icons": {  
+    "16": "src/images/get_started16.png",
+    "32": "src/images/get_started32.png",
+    "48": "src/images/get_started48.png",
+    "128": "src/images/get_started128.png"
+  }
+}
