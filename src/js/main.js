@@ -1,3 +1,5 @@
+"use strict";
+
 const key = "local-key";
 class Model {
   constructor() {
@@ -55,15 +57,15 @@ class Model {
    * @pre take the parameter id and data which as to be update
    * @post map through the each state, and replace the data with specified id
    */
-  updateStates(id, data){
+  updateState(id, data){
     let obj = {};
     chrome.storage.local.get(null, (result) => {
       let states = result[key];
       let newStates = states.map(state =>
-        state.id === id ? {id, stateName: data.stateName, tabsUrl: data.tabsUrl} : state
+        state.id === id ? {id, stateName: data.stateName ? data.stateName : state.stateName, tabsUrl: data.tabsUrl ? data.tabsUrl : state.tabsUrl} : state
       )
       obj[key] = newStates; 
-      chrome.state.local.set(objs, ()=>{
+      chrome.storage.local.set(obj, ()=>{
         if (chrome.runtime.lastError) {
           console.log("An error occured : " + JSON.stringify(chrome.runtime.lastError));
         }
@@ -71,7 +73,7 @@ class Model {
       })
     })
   }
-
+// 
   /**
    * 
    * @param {*} id 
@@ -96,16 +98,20 @@ class Model {
 
 class View {
   constructor() {
-    this.ul = document.getElementsByTagName("ul");
-    this.li = this.createElement("li", "list");
-    this.saveBtn = document.getElementById("saveTabs");
-    this.input = document.getElementById("saveState");
+    this.list = this.getElement("ul");
+    this.saveBtn = this.getElement("#saveTabs");
+    this.input = this.getElement("#saveState");
   }
+
 
   get _stateName() {
     return this.input.value;
   }
-
+  
+  get _resetInput(){
+    this.input.value = '';
+  }
+  // get the all the tabs which are opened in the current window
   get _allTabsUrl() {
     let saveTabs = [];
     chrome.tabs.query({}, tabs => {
@@ -116,6 +122,7 @@ class View {
     return saveTabs;
   }
 
+  // create the element with the optional CSS Class
   createElement(tagName, className) {
     const element = document.createElement(tagName);
     if (className) element.classList.add(className);
@@ -123,12 +130,19 @@ class View {
     return element;
   }
 
+  // retrive the element from the dom
+  getElement(selector){
+    return document.querySelector(selector);
+  }
+
+  //waiting for event listeners and once it happen, it will return the stateName and all the tabUrls
   bindAddTabs(handlers) {
     this.saveBtn.addEventListener("click", e => {
       e.preventDefault();
 
       if (this._stateName) {
         handlers({ stateName: this._stateName, tabsUrl: this._allTabsUrl });
+        this._resetInput();
       }
     });
 
@@ -136,10 +150,47 @@ class View {
       if(e.keyCode === 13 && e.which===13){
         if(this._stateName){
           handlers({ stateName: this._stateName, tabsUrl: this._allTabsUrl })
+          this._resetInput();
         }
       }
     })
   }
+
+  displayItems(){
+    // Delete all Item
+    while(this.list.firstChild){
+      this.list.removeChild(this.list.firstChild);
+    }
+
+    chrome.storage.local.get([key], (result) => {
+      let states = result[key];
+
+      if(states.length === 0){
+        const p = this.getElement('p');
+        p.textContent = "Nothing to show! add a state";
+        this.list.append(p);
+      } else {
+        states.forEach(state => {
+          const li = this.createElement('li');
+          li.id = state.id;
+          li.classList.add('item')
+          const open = this.createElement('i', 'fa')
+          open.classList.add('fa-external-link');
+          const close = this.createElement('i', 'fa');
+          close.classList.add('fa-trash');
+
+          li.textContent = state.stateName;
+
+          li.append(open, close);
+
+          // append all states to ul
+          this.list.append(li)
+
+        })
+      }
+    })
+  }
+
 }
 
 class Controller {

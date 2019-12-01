@@ -49,7 +49,12 @@ ul li {
   padding: 0;
 }
 
-.saveList .list {
+.itemList{
+  display: flex;
+  flex-direction: column;
+}
+
+.itemList .item {
   cursor: pointer;
   position: relative;
   padding: 12px 8px 12px 40px;
@@ -64,11 +69,11 @@ ul li {
   user-select: none;
 }
 
-.saveList .list:nth-child(odd) {
+.itemList .item:nth-child(odd) {
   background-color: #f9f9f9;
 }
 
-.saveList .list:hover {
+.itemList .item:hover {
   background: #ddd;
 }
 
@@ -83,3 +88,4 @@ ul li {
   background-color: #f44336;
   color: white;
 }
+
