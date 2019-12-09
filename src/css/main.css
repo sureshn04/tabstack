@@ -89,3 +89,28 @@ ul li {
   color: white;
 }
 
+.container .itemList .item i {
+  display: inline-block;
+  right: 0; 
+  position: absolute;
+}
+
+.container .itemList .item .fa-trash{
+  right: 0;
+  padding: 4px 10px 0 5px;
+}
+
+
+.container .itemList .item .fa-trash:hover{
+  color: #f44336;
+  background-color: #d3d3d3;
+}
+
+.container .itemList .item .fa-external-link{
+  right: 30px;
+  padding: 5px 10px 0 5px; 
+}
+
+.container .itemList .item .fa-external-link:hover{
+  color: #00aa41;
+}

@@ -101,6 +101,7 @@ class View {
     this.list = this.getElement("ul");
     this.saveBtn = this.getElement("#saveTabs");
     this.input = this.getElement("#saveState");
+    this.displayItems();
   }
 
 
@@ -167,7 +168,7 @@ class View {
 
       if(states.length === 0){
         const p = this.getElement('p');
-        p.textContent = "Nothing to show! add a state";
+        p.textContent = "Nothing to show!¯\\_(ツ)_/¯";
         this.list.append(p);
       } else {
         states.forEach(state => {
