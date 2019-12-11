@@ -54,8 +54,13 @@ ul li {
   flex-direction: column;
 }
 
+.itemList p{
+  text-align: center;
+  font-size: 1.5rem;
+}
+
 .itemList .item {
-  cursor: pointer;
+  /* cursor: pointer; */
   position: relative;
   padding: 12px 8px 12px 40px;
   background: #eee;
@@ -96,6 +101,7 @@ ul li {
 }
 
 .container .itemList .item .fa-trash{
+  cursor: pointer;
   right: 0;
   padding: 4px 10px 0 5px;
 }
@@ -104,6 +110,7 @@ ul li {
 .container .itemList .item .fa-trash:hover{
   color: #f44336;
   background-color: #d3d3d3;
+  
 }
 
 .container .itemList .item .fa-external-link{
