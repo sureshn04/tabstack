@@ -1,11 +1,12 @@
 {
+  "applications": {
+    "gecko": {
+      "id": "ext@example.org"
+    }
+  },
   "manifest_version": 2,
   "name": "Hit Save",
   "version": "0.1",
-  "background": {
-    "scripts": ["src/background.js"],
-    "persistent": false
-  },
   "permissions": ["tabs","declarativeContent","storage"],
   "browser_action": {
     "default_popup": "src/popup.html",
