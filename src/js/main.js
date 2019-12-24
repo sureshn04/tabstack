@@ -62,7 +62,7 @@ class Model {
    * @pre take the parameter id and data which as to be update
    * @post map through the each state, and replace the data with specified id
    */
-  updateState(id, data) {
+  updateState(id, tabs) {
     let obj = {};
     chrome.storage.local.get(null, result => {
       let states = result[key];
@@ -70,8 +70,8 @@ class Model {
         state.id === id
           ? {
               id,
-              stateName: data.stateName ? data.stateName : state.stateName,
-              tabsUrl: data.tabsUrl ? data.tabsUrl : state.tabsUrl
+              stateName: state.stateName,
+              tabsUrl: tabs ? tabs : state.tabsUrl
             }
           : state
       );
@@ -195,12 +195,6 @@ class View {
       }
     });
     // console.log(el)
-    const myFunv = e => {
-      console.log(e.target.className);
-      e.preventDefault();
-      console.log("afterClick");
-      console.log(e.target.parentElement.id);
-    };
   }
 
   bindOpenTabs(handlers) {
@@ -210,6 +204,16 @@ class View {
         handlers(parseInt(e.target.parentElement.id));
       }
     });
+  }
+
+  bindUpdateTabs(handlers){
+    document.querySelector("body").addEventListener("click", e => {
+      e.preventDefault();
+
+      if(e.target.className === "fa fa-plus-square-o") {
+        handlers({ id: parseInt(e.target.parentElement.id), tabsUrl: this._allTabsUrl });
+      }
+    })
   }
 
   displayItems() {
@@ -234,10 +238,12 @@ class View {
           open.classList.add("fa-external-link");
           const close = this.createElement("i", "fa");
           close.classList.add("fa-trash");
+          const addTab = this.createElement("i", "fa");
+          addTab.classList.add("fa-plus-square-o");
 
           li.textContent = state.stateName;
 
-          li.append(open, close);
+          li.append(addTab, open, close);
 
           // append all states to ul
           this.list.append(li);
@@ -255,6 +261,7 @@ class Controller {
     this.view.bindAddTabs(this.handleAddTabs);
     this.view.bindDeleteTabs(this.handleDeleteTabs);
     this.view.bindOpenTabs(this.handleOpenTabs);
+    this.view.bindUpdateTabs(this.handleUpdateTabs)
     // display initial items
     this.onItemListChanged();
   }
@@ -278,6 +285,11 @@ class Controller {
   handleDeleteTabs = id => {
     this.model.deleteStates(id, this.onItemListChanged);
   };
+
+  // for updating the tabs in window  
+  handleUpdateTabs = ({id, tabsUrl}) => {
+    this.model.updateState(id, tabsUrl)
+  }
 
   // Display the items
   onItemListChanged = () => {

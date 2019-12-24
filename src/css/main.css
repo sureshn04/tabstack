@@ -117,10 +117,19 @@ ul li {
 }
 
 .container .itemList .item .fa-external-link{
-  right: 30px;
+  right: 25px;
   padding: 5px 10px 0 5px; 
 }
 
 .container .itemList .item .fa-external-link:hover{
   color: #00aa41;
+}
+
+.container .itemList .item .fa-plus-square-o{
+  right: 60px;
+  padding: 5px 10px 0 5px; 
+}
+
+.container .itemList .item .fa-plus-square-o:hover{
+  color: #00aa8e;
 }
